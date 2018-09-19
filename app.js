@@ -1,7 +1,18 @@
 const request = require('request');
 const yargs = require('yargs');
 
-const argv = yargs.options;
+const argv = yargs
+    .options({
+        a: {
+            demand: true,
+            alias: address,
+            describe: 'Address to fetch weather for',
+            string: true
+        }
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
 
 request({
     url: 'http://www.mapquestapi.com/geocoding/v1/address?key=docZj15iw6MYvJsbyl2lTtiigj2r3X5d&location=1301%20lombard%20street%20philadelphia',
