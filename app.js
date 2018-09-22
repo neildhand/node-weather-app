@@ -1,5 +1,9 @@
-const request = require('request');
 const yargs = require('yargs');
+const request = require('request');
+
+const geocode = require('./geocode/geocode.js');
+const weather = require('./weather/weather.js');
+
 
 const argv = yargs
     .options({
@@ -14,25 +18,32 @@ const argv = yargs
     .alias('help', 'h')
     .argv;
 
-    console.log(argv);
+    geocode.geocodeAddress(argv.address, (errorMessage, results) => {
+        if(errorMessage) {
+            console.log(errorMessage);
+        } else {
+            console.log(JSON.stringify(results, undefined, 2));
+            
+            weather.getWeather(results.latitude, results.longitude, (errorMessage, weatherResults) => {
+                if(errorMessage){
+                    console.log(errorMessage);
+                } else {
+                    console.log(JSON.stringify(weatherResults, undefined, 2));
+                }
+            });
+        }
+    });
 
-    var encodedAddress = encodeURIComponent(argv.address);
+    
 
-request({
-    url: `http://www.mapquestapi.com/geocoding/v1/address?key=docZj15iw6MYvJsbyl2lTtiigj2r3X5d&location=${encodedAddress}`,
-    json: true
-}, (error, response, body) => {
-    console.log(`Address: ${body.results[0].providedLocation.location}`);
 
-    console.log(`Latitude: ${body.results[0].locations[0].displayLatLng.lat}`);
-
-    console.log(`Longitude: ${body.results[0].locations[0].displayLatLng.lng}`);
-
-});
+    //60c20756fc587f564d4c1bb0c435a559
 
 
 
-// -----
+
+
+    // -----
 
 // Using the MapQuest Geocoding API
 
