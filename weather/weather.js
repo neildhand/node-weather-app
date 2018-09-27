@@ -11,6 +11,7 @@ var getWeather = (latitude, longitude, callback) => {
             callback(undefined, {
                 summary: body.currently.summary,
                 temperature: body.currently.temperature,
+                apparentTemperature: body.currently.apparentTemperature,
                 humidity: body.currently.humidity
             });
         }
